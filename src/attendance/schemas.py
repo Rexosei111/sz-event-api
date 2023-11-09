@@ -12,6 +12,16 @@ class EventAttendanceRead(BaseModel):
     last_name: Optional[str] = None
     location: Optional[str] = None
     present: Optional[bool] = False
+    occupation: Optional[str] = None
+    level: Optional[str] = None
+    school: Optional[str] = None
+    profession: Optional[str] = None
+    other: Optional[str] = None
+    by_friend: Optional[bool] = None
+    by_member: Optional[bool] = None
+    via_whatsapp: Optional[bool] = None
+    via_instagram: Optional[bool] = None
+    friend_name: Optional[str] = None
 
 
 class EventAttendanceCreate(BaseModel):
@@ -21,6 +31,16 @@ class EventAttendanceCreate(BaseModel):
     last_name: Optional[str] = None
     location: Optional[str] = None
     present: Optional[bool] = False
+    occupation: Optional[str] = None
+    level: Optional[str] = None
+    school: Optional[str] = None
+    profession: Optional[str] = None
+    other: Optional[str] = None
+    by_friend: Optional[bool] = None
+    by_member: Optional[bool] = None
+    via_whatsapp: Optional[bool] = None
+    via_instagram: Optional[bool] = None
+    friend_name: Optional[str] = None
 
 
 class EventAttendanceUpdate(BaseModel):
@@ -30,3 +50,13 @@ class EventAttendanceUpdate(BaseModel):
     last_name: Optional[str] = None
     location: Optional[str] = None
     present: Optional[bool] = False
+    occupation: Optional[str] = None
+    level: Optional[str] = None
+    school: Optional[str] = None
+    profession: Optional[str] = None
+    other: Optional[str] = None
+    by_friend: Optional[bool] = None
+    by_member: Optional[bool] = None
+    via_whatsapp: Optional[bool] = None
+    via_instagram: Optional[bool] = None
+    friend_name: Optional[str] = None
