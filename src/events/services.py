@@ -136,3 +136,16 @@ async def user_get_event_by_id(session: AsyncSession, event_id: str):
         return event
     except SQLAlchemyError:
         raise HTTPException(500, detail="Something went wrong")
+
+
+async def get_event_name_by_id(session: AsyncSession, event_id: str):
+    try:
+        db_result = await session.execute(
+            select(Events.name).where(Events.id == event_id)
+        )
+        event_name = db_result.scalar_one_or_none()
+        if event_name is None:
+            raise HTTPException(404, detail="Event not found")
+        return event_name
+    except SQLAlchemyError:
+        raise HTTPException(500, detail="Something went wrong")

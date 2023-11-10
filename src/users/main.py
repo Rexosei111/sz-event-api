@@ -92,6 +92,17 @@ async def get_an_event(
     return await get_event_by_id(session=session, event_id=event_id)
 
 
+@users_app.get(
+    "/events/{event_id}/mini", response_model=EventListingRead, tags=["Events"]
+)
+async def get_an_event_mini(
+    event_id: str,
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(get_current_active_user),
+):
+    return await get_event_by_id(session=session, event_id=event_id)
+
+
 @users_app.post(
     "/event/{event_id}", response_model=EventAttendanceRead, tags=["Attendance"]
 )

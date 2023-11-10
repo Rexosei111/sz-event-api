@@ -1,10 +1,16 @@
-from typing import Optional
+import os
+from typing import Any, Dict, List, Optional
 
+import numpy as np
+import pandas as pd
 from fastapi import HTTPException
 from fastapi_pagination.ext.sqlalchemy import paginate
+from openpyxl import Workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 from sqlalchemy import func, or_, select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from utils import generate_unique_filename
 
 from .models import EventAttendance
 from .schemas import EventAttendanceCreate
@@ -30,6 +36,32 @@ async def get_event_attendances(
 
     try:
         return await paginate(conn=session, query=statement)
+    except SQLAlchemyError:
+        raise HTTPException(500, detail="Something went wrong")
+
+
+async def get_event_attendances_download(
+    session: AsyncSession, event_id: str, query: str, present: Optional[bool] = None
+):
+    statement = (
+        select(EventAttendance)
+        .where(EventAttendance.event_id == event_id)
+        .where(
+            or_(
+                EventAttendance.email.ilike(f"%{query}%"),
+                EventAttendance.first_name.ilike(f"%{query}%"),
+                EventAttendance.last_name.ilike(f"%{query}%"),
+            ),
+        )
+    )
+
+    if present is not None:
+        statement = statement.where(EventAttendance.present == present)
+
+    try:
+        db_results = await session.execute(statement=statement)
+        attendees = db_results.scalars().all()
+        return attendees
     except SQLAlchemyError:
         raise HTTPException(500, detail="Something went wrong")
 
@@ -120,3 +152,23 @@ async def mark_attendance(
     attendee.present = present
     await session.commit()
     return attendee
+
+
+ATTENDANCE_ROOT_FOLDER = os.path.join(os.getcwd(), "attendance")
+
+
+def create_excel_file_with_attendees(
+    attendees: List[Dict[str, Any]], event_name: str = ""
+):
+    df = pd.DataFrame(attendees)
+    file_name = generate_unique_filename(f"{event_name}_attendees", 30)
+    excel_file = os.path.join(ATTENDANCE_ROOT_FOLDER, f"{file_name}.xlsx")
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+
+    for row in dataframe_to_rows(df, index=False, header=True):
+        ws.append(row)
+
+    wb.save(excel_file)
+    return excel_file, file_name
