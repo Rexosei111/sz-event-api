@@ -27,7 +27,7 @@ class EventAttendance(Base):
     via_instagram = Column(Boolean, default=False)
     friend_name = Column(String(200))
     event_id = Column(GUID, ForeignKey("events.id"))
-    event = relationship("Events")
+    event = relationship("Events", back_populates="attendance")
     createdAt = Column(DateTime, nullable=True, default=datetime.utcnow)
     updatedAt = Column(
         DateTime, nullable=True, default=datetime.utcnow, onupdate=datetime.utcnow

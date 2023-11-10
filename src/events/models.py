@@ -34,6 +34,9 @@ class Events(Base):
     images = relationship("EventImages", back_populates="event", lazy="selectin")
     organiser_id = Column(GUID, ForeignKey("organisers.id"))
     organiser = relationship("Organisers", back_populates="events", lazy="selectin")
+    attendance = relationship(
+        "EventAttendance", back_populates="event", cascade="all, delete-orphan"
+    )
     createdAt = Column(DateTime, nullable=True, default=datetime.utcnow)
     updatedAt = Column(
         DateTime, nullable=True, default=datetime.utcnow, onupdate=datetime.utcnow
