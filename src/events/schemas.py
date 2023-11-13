@@ -51,7 +51,7 @@ class EventRead(BaseModel):
     latitude: Optional[str] = None
     published: Optional[bool] = False
 
-    images: Optional[List[EventImagesRead]] = None
+    images: List[Optional[EventImagesRead]] = []
 
     class Config:
         from_attributes = True

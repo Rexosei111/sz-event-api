@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from admins.main import get_current_active_user
 from admins.models import Admins
@@ -11,7 +11,11 @@ from fastapi_pagination.links import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils import delete_file
 
-from .schemas import EventAttendanceCreate, EventAttendanceRead
+from .schemas import (
+    EventAttendanceCreate,
+    EventAttendanceRead,
+    EventAttendanceReadWithoutId,
+)
 from .services import (
     create_attenances,
     create_excel_file_with_attendees,
@@ -38,7 +42,10 @@ async def get_event_attandances(
     )
 
 
-@attendance_app.get("/{event_id}/download")
+@attendance_app.get(
+    "/{event_id}/download",
+    response_model=List[EventAttendanceReadWithoutId],
+)
 async def download_event_attandances(
     *,
     event_id: str,
@@ -48,19 +55,20 @@ async def download_event_attandances(
     session: AsyncSession = Depends(get_async_session),
     background_tasks: BackgroundTasks,
 ):
-    event_name = await get_event_name_by_id(session=session, event_id=event_id)
+    # event_name = await get_event_name_by_id(session=session, event_id=event_id)
     attendees = await get_event_attendances_download(
         session=session, event_id=event_id, query=query, present=present
     )
-    tranformed_attendees = [
-        EventAttendanceRead(**attendee.__dict__).model_dump(exclude=["id"])
-        for attendee in attendees
-    ]
-    excel_file, file_name = create_excel_file_with_attendees(
-        attendees=tranformed_attendees, event_name=event_name
-    )
-    background_tasks.add_task(delete_file, excel_file, 300)
-    return FileResponse(excel_file, filename=f"{file_name}.xlsx")
+    return attendees
+    # tranformed_attendees = [
+    #     EventAttendanceRead(**attendee.__dict__).model_dump(exclude=["id"])
+    #     for attendee in attendees
+    # ]
+    # excel_file, file_name = create_excel_file_with_attendees(
+    #     attendees=tranformed_attendees, event_name=event_name
+    # )
+    # background_tasks.add_task(delete_file, excel_file, 300)
+    # return FileResponse(excel_file, filename=f"{file_name}.xlsx")
 
 
 @attendance_app.get("/{event_id}/summary")

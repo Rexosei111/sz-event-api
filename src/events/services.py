@@ -39,7 +39,10 @@ async def create_event_images(
     extra_params = remove_none({"event_id": event_id, "event": event})
     for image in images:
         new_image = EventImages(url=image.url, **extra_params)
-        session.add(new_image)
+        if not commit:
+            session.flush(new_image)
+        else:
+            session.add(new_image)
 
     if commit:
         await session.commit()
