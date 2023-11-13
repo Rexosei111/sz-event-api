@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,12 @@ from .schemas import EventAttendanceCreate
 
 
 async def get_event_attendances(
-    session: AsyncSession, event_id: str, query: str, present: Optional[bool] = None
+    session: AsyncSession,
+    event_id: str,
+    query: str,
+    present: Optional[bool] = None,
+    occupations: Annotated[List[str] | None, None] = None,
+    invitations: Annotated[List[str] | None, None] = None,
 ):
     statement = (
         select(EventAttendance)
@@ -33,6 +38,22 @@ async def get_event_attendances(
 
     if present is not None:
         statement = statement.where(EventAttendance.present == present)
+    if occupations is not None:
+        statement = statement.where(or_(EventAttendance.occupation.in_(occupations)))
+
+    if invitations is not None:
+        for invite in invitations:
+            if invite == "via_whatsapp":
+                statement = statement.where(or_(EventAttendance.via_whatsapp == True))
+
+            if invite == "via_instagram":
+                statement = statement.where(or_(EventAttendance.via_instagram == True))
+
+            if invite == "by_friend":
+                statement = statement.where(or_(EventAttendance.by_friend == True))
+
+            if invite == "by_member":
+                statement = statement.where(or_(EventAttendance.by_member == True))
 
     try:
         return await paginate(conn=session, query=statement)
@@ -41,7 +62,12 @@ async def get_event_attendances(
 
 
 async def get_event_attendances_download(
-    session: AsyncSession, event_id: str, query: str, present: Optional[bool] = None
+    session: AsyncSession,
+    event_id: str,
+    query: str,
+    present: Optional[bool] = None,
+    occupations: Annotated[List[str] | None, None] = None,
+    invitations: Annotated[List[str] | None, None] = None,
 ):
     statement = (
         select(EventAttendance)
@@ -57,6 +83,23 @@ async def get_event_attendances_download(
 
     if present is not None:
         statement = statement.where(EventAttendance.present == present)
+
+    if occupations is not None:
+        statement = statement.where(or_(EventAttendance.occupation.in_(occupations)))
+
+    if invitations is not None:
+        for invite in invitations:
+            if invite == "via_whatsapp":
+                statement = statement.where(or_(EventAttendance.via_whatsapp == True))
+
+            if invite == "via_instagram":
+                statement = statement.where(or_(EventAttendance.via_instagram == True))
+
+            if invite == "by_friend":
+                statement = statement.where(or_(EventAttendance.by_friend == True))
+
+            if invite == "by_member":
+                statement = statement.where(or_(EventAttendance.by_member == True))
 
     try:
         db_results = await session.execute(statement=statement)
