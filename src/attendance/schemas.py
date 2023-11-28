@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 
 class EventAttendanceReadWithoutId(BaseModel):
-    email: Optional[str] = None
-    phone_number: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
     location: Optional[str] = None
     present: Optional[bool] = False
     occupation: Optional[str] = None

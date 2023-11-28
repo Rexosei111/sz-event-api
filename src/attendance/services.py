@@ -54,6 +54,7 @@ async def get_event_attendances(
 
             if invite == "by_member":
                 statement = statement.where(or_(EventAttendance.by_member == True))
+    statement = statement.order_by(EventAttendance.first_name)
 
     try:
         return await paginate(conn=session, query=statement)
@@ -101,6 +102,7 @@ async def get_event_attendances_download(
             if invite == "by_member":
                 statement = statement.where(or_(EventAttendance.by_member == True))
 
+    statement = statement.order_by(EventAttendance.first_name)
     try:
         db_results = await session.execute(statement=statement)
         attendees = db_results.scalars().all()
