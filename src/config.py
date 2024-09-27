@@ -30,15 +30,15 @@ class Settings(BaseSettings):
     db_url: str
     # jwt_expire_time: int
     # algorithm: str
-    google_client_id: str
-    google_client_secret: str
-    sqlite_path: str
-    paystack_public_key: str
-    sender_name: str = Field(default="Spirit Zone")
-    sender_email: str = Field(default="kyei9189@gmail.com")
+    # google_client_id: str
+    # google_client_secret: str
+    # sqlite_path: str
+    # paystack_public_key: str
+    # sender_name: str = Field(default="Spirit Zone")
+    # sender_email: str = Field(default="kyei9189@gmail.com")
 
-    paystack_secret_key: str
-    brevo_api_key: str
+    # paystack_secret_key: str
+    # brevo_api_key: str
 
     class Config:
         env_file = ".env"

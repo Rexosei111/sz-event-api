@@ -28,7 +28,7 @@ from .services import (
     get_all_followings,
     get_event_by_id,
 )
-from .utils import auth_backend, fastapi_users, google_oauth_client
+from .utils import auth_backend, fastapi_users
 
 settings = get_settings()
 users_app = FastAPI(title="Users API", version="0.1.0")
@@ -45,13 +45,13 @@ users_app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 users_app.include_router(register_router, prefix="/auth", tags=["Authentication"])
 users_app.include_router(verify_router, prefix="", tags=["Authentication"])
 users_app.include_router(users_router, prefix="", tags=["Users"])
-users_app.include_router(
-    fastapi_users.get_oauth_router(
-        google_oauth_client, auth_backend, settings.jwt_secret, associate_by_email=True
-    ),
-    prefix="/auth/google",
-    tags=["Google Auth"],
-)
+# users_app.include_router(
+#     fastapi_users.get_oauth_router(
+#       , auth_backend, settings.jwt_secret, associate_by_email=True
+#     ),
+#     prefix="/auth/google",
+#     tags=["Google Auth"],
+# )
 get_current_active_user = fastapi_users.current_user(active=True, optional=True)
 
 

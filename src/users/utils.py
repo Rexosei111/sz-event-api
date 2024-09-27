@@ -17,9 +17,9 @@ from .schemas import UserCreate
 
 settings = get_settings()
 
-google_oauth_client = GoogleOAuth2(
-    settings.google_client_id, settings.google_client_secret
-)
+# google_oauth_client = GoogleOAuth2(
+#     settings.google_client_id, settings.google_client_secret
+# )
 logger = get_logger()
 
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
