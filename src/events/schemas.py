@@ -20,6 +20,7 @@ class EventListingRead(BaseModel):
     name: str
     summary: Optional[str] = None
     cover_image: Optional[str] = None
+    social_preview_image: Optional[str] = None
     start_date: Optional[Union[datetime, str]] = None
     organiser: OrganiserRead
 
@@ -30,6 +31,7 @@ class EventReadWithOrganiser(BaseModel):
     summary: Optional[str] = None
     description: Optional[str] = None
     cover_image: Optional[str] = None
+    social_preview_image: Optional[str] = None
     start_date: Optional[datetime] = None
     address: Optional[str] = None
     longitude: Optional[str] = None
@@ -45,6 +47,7 @@ class EventRead(BaseModel):
     summary: Optional[str] = None
     description: Optional[str] = None
     cover_image: Optional[str] = None
+    social_preview_image: Optional[str] = None
     start_date: Optional[datetime] = None
     address: Optional[str] = None
     longitude: Optional[str] = None
@@ -62,6 +65,7 @@ class EventCreate(BaseModel):
     summary: Optional[str] = None
     description: Optional[str] = None
     cover_image: Optional[str] = None
+    social_preview_image: Optional[str] = None
     start_date: Optional[Union[str, datetime]] = None
     address: Optional[str] = None
     longitude: Optional[str] = None
@@ -83,6 +87,7 @@ class EventUpdate(BaseModel):
     summary: Optional[str] = None
     description: Optional[str] = None
     cover_image: Optional[str] = None
+    social_preview_image: Optional[str] = None
     start_date: Optional[Union[str, datetime]] = None
     address: Optional[str] = None
     longitude: Optional[str] = None

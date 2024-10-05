@@ -26,6 +26,7 @@ class Events(Base):
     summary = Column(String(length=500))
     description = Column(Text)
     cover_image = Column(String(length=200))
+    social_preview_image = Column(String(length=200))
     start_date = Column(DateTime)
     address = Column(String(300))
     longitude = Column(String(40))
