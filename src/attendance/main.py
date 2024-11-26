@@ -9,7 +9,8 @@ from fastapi.responses import FileResponse
 from fastapi_pagination import add_pagination
 from fastapi_pagination.links import Page
 from sqlalchemy.ext.asyncio import AsyncSession
-from utils import delete_file
+from utils import delete_file, send_sms
+from fastapi import BackgroundTasks
 
 from .schemas import (
     EventAttendanceCreate,
@@ -86,10 +87,13 @@ async def get_event_attandances_summary(
 async def create_event_attendance(
     event_id: str,
     data: EventAttendanceCreate,
+    background_tasks: BackgroundTasks,
     admin: Admins = Depends(get_current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
-    return await create_attenances(session=session, event_id=event_id, data=data)
+    attendee = await create_attenances(session=session, event_id=event_id, data=data)
+    background_tasks.add_task(send_sms, phone_numbers=[attendee.phone_number])
+    return attendee
 
 
 @attendance_app.patch("/{event_id}", response_model=EventAttendanceRead)

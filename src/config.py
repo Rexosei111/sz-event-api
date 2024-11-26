@@ -1,11 +1,12 @@
 import logging
 from functools import lru_cache
 from logging import Logger
-from typing import Union
+from typing import Union, Optional
 
 from dotenv import load_dotenv
 from pydantic import Field
 from pydantic_settings import BaseSettings
+
 
 load_dotenv()
 
@@ -28,6 +29,8 @@ class Settings(BaseSettings):
     reset_password_token_secret: str
     verification_token_secret: str
     db_url: str
+    arkesel_url: str = "https://sms.arkesel.com/api/v2/sms/send"
+    arkesel_api_key: str
     # jwt_expire_time: int
     # algorithm: str
     # google_client_id: str

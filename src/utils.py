@@ -1,7 +1,12 @@
 import os
 import time
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
+from config import get_settings
+import httpx
+
+
+settings = get_settings()
 
 
 def remove_none(dict: Dict[str, Any]):
@@ -32,3 +37,25 @@ def delete_file(file_path: str, seconds: Optional[float] = 300):
             print(f"Error deleting file '{file_path}': {e}")
     else:
         print(f"File '{file_path}' does not exist.")
+
+
+async def send_sms(phone_numbers: List[str], message: str = "", sender_id: str = "GSC24"):
+    payload = {
+        "sender": "GSC24",  # Replace with your sender ID
+        "message": f"Thank you for registering for Good Sherpherd Conference!",
+        "recipients": phone_numbers,
+    }
+    headers = {
+        "api-key": settings.arkesel_api_key,
+        "Content-Type": "application/json"
+    }
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(settings.arkesel_url, json=payload, headers=headers)
+        if response.status_code == 200:
+            return {"status": "success", "data": response.json()}
+        else:
+            return {"status": "error", "details": response.json()}
+    except Exception as e:
+        print(f"Unable to send message to {phone_numbers}")
