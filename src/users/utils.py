@@ -2,6 +2,7 @@ import contextlib
 import uuid
 
 from config import get_logger, get_settings
+from utils import send_sms
 from database import get_async_session
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import (

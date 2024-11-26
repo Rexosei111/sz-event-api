@@ -7,7 +7,7 @@ from attendance.schemas import EventAttendanceCreate, EventAttendanceRead
 from config import get_settings
 from database import get_async_session
 from events.schemas import EventListingRead, EventRead, EventReadWithOrganiser
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi_pagination import add_pagination
 from fastapi_pagination.links import Page
 from pydantic import ValidationError
@@ -28,7 +28,8 @@ from .services import (
     get_all_followings,
     get_event_by_id,
 )
-from .utils import auth_backend, fastapi_users
+from .utils import auth_backend, fastapi_users, send_sms
+# from ..utils import send_sms
 
 settings = get_settings()
 users_app = FastAPI(title="Users API", version="0.1.0")
@@ -108,6 +109,7 @@ async def get_an_event_mini(
 )
 async def rsvp_an_event(
     event_id: str,
+    background_tasks: BackgroundTasks,
     data: Optional[EventAttendanceCreate] = None,
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(get_current_active_user),
@@ -121,8 +123,9 @@ async def rsvp_an_event(
         pass
     if data is None and user is not None:
         data = EventAttendanceCreate(**user.__dict__)
-    return await create_attenances(session=session, event_id=event_id, data=data)
-
+    attendee = await create_attenances(session=session, event_id=event_id, data=data)
+    background_tasks.add_task(send_sms, phone_numbers=[attendee.phone_number])
+    return attendee
 
 @users_app.get(
     "/organisers/{organiser_id}", response_model=OrganiserRead, tags=["Organisers"]
