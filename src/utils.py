@@ -40,9 +40,22 @@ def delete_file(file_path: str, seconds: Optional[float] = 300):
 
 
 async def send_sms(phone_numbers: List[str], message: str = "", sender_id: str = "GSC24"):
+    payloadMessage = """
+    Thank you for registering for a once in a lifetime opportunity,Good Shepherd Conference 2024. We're excited to experience God's presence with you. 
+
+Here are the event details: 
+Date: December 14th, 2024 
+Time: 10am GMT 
+Venue: Perez chapel international - Youth Auditorium 
+
+Share this link to invite a friend
+https://gsc.szfamily.org/events/638dd663-90fe-4fa5-8021-50f7d66cd9b1
+
+See you there!
+    """
     payload = {
         "sender": "GSC24",  # Replace with your sender ID
-        "message": f"Thank you for registering for Good Sherpherd Conference!",
+        "message": payloadMessage,
         "recipients": phone_numbers,
     }
     headers = {
