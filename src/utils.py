@@ -49,7 +49,7 @@ Time: 10am GMT
 Venue: Perez chapel international - Youth Auditorium 
 
 Share this link to invite a friend
-https://gsc.szfamily.org/events/638dd663-90fe-4fa5-8021-50f7d66cd9b1
+https://gsc.szfamily.org
 
 See you there!
     """
