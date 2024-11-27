@@ -91,7 +91,9 @@ async def create_event_attendance(
     admin: Admins = Depends(get_current_active_user),
     session: AsyncSession = Depends(get_async_session),
 ):
+    print(data)
     attendee = await create_attenances(session=session, event_id=event_id, data=data)
+    print(attendee)
     # background_tasks.add_task(send_sms, phone_numbers=[attendee.phone_number])
     return attendee
 

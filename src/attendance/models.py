@@ -25,6 +25,7 @@ class EventAttendance(Base):
     by_member = Column(Boolean, default=False)
     via_whatsapp = Column(Boolean, default=False)
     via_instagram = Column(Boolean, default=False)
+    first_time = Column(Boolean, nullable=True)
     friend_name = Column(String(200))
     event_id = Column(GUID, ForeignKey("events.id"))
     event = relationship("Events", back_populates="attendance")

@@ -123,7 +123,9 @@ async def rsvp_an_event(
         pass
     if data is None and user is not None:
         data = EventAttendanceCreate(**user.__dict__)
+    print(data)
     attendee = await create_attenances(session=session, event_id=event_id, data=data)
+    print(attendee)
     background_tasks.add_task(send_sms, phone_numbers=[attendee.phone_number])
     return attendee
 

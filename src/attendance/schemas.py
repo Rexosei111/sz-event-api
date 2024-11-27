@@ -21,6 +21,8 @@ class EventAttendanceReadWithoutId(BaseModel):
     via_whatsapp: Optional[bool] = None
     via_instagram: Optional[bool] = None
     friend_name: Optional[str] = None
+    first_time: Optional[bool] = None
+    
 
 
 class EventAttendanceRead(BaseModel):
@@ -41,6 +43,8 @@ class EventAttendanceRead(BaseModel):
     via_whatsapp: Optional[bool] = None
     via_instagram: Optional[bool] = None
     friend_name: Optional[str] = None
+    first_time: Optional[bool] = None
+    
 
 
 class EventAttendanceCreate(BaseModel):
@@ -60,6 +64,7 @@ class EventAttendanceCreate(BaseModel):
     via_whatsapp: Optional[bool] = None
     via_instagram: Optional[bool] = None
     friend_name: Optional[str] = None
+    first_time: Optional[bool] = None
 
 
 class EventAttendanceUpdate(BaseModel):
@@ -79,3 +84,5 @@ class EventAttendanceUpdate(BaseModel):
     via_whatsapp: Optional[bool] = None
     via_instagram: Optional[bool] = None
     friend_name: Optional[str] = None
+    first_time: Optional[bool] = None
+    
